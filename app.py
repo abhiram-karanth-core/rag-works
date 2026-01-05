@@ -2,23 +2,30 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 import os
 import uuid
 import PyPDF2
-import google.generativeai as genai
 from pinecone import Pinecone, ServerlessSpec
-from secret_key import GEMINI_API_KEY, PINECONE_API_KEY
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
+from dotenv import load_dotenv
 import re
-
+load_dotenv()
 app = Flask(__name__) 
 
 # Configure APIs
-genai.configure(api_key=GEMINI_API_KEY)
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+llm = ChatMistralAI(
+    model="mistral-large-latest",
+    temperature=0.3
+)
+
+embeddings_model = MistralAIEmbeddings(
+    model="mistral-embed"
+)
+
 pinecone_client = Pinecone(api_key=PINECONE_API_KEY)
 
-INDEX_NAME = "fest"
+INDEX_NAME = "fest2"
 index = pinecone_client.Index(INDEX_NAME)
 
-os.environ["GOOGLE_API_KEY"] = GEMINI_API_KEY
-llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
 conversation_history = ""
 
 # Home route
@@ -93,8 +100,7 @@ def process_pdf_and_store_embeddings(pdf_path):
     for page_num, chunk in text_chunks:
         if chunk.strip():
             try:
-                result = genai.embed_content(model="models/text-embedding-004", content=chunk)
-                embedding = result.get("embedding", [])
+                embedding = embeddings_model.embed_query(chunk)
                 if embedding:
                     upsert_data.append(
                         (str(uuid.uuid4()), embedding, {"text": chunk, "page": page_num})
@@ -111,8 +117,8 @@ def process_pdf_and_store_embeddings(pdf_path):
 # Function to query Pinecone
 def query_pinecone(query_text):
     try:
-        result = genai.embed_content(model="models/text-embedding-004", content=query_text)
-        query_embedding = result.get("embedding", [])
+        query_embedding = embeddings_model.embed_query(query_text)
+
 
         if not query_embedding:
             return "Error: Failed to generate embedding for query."
