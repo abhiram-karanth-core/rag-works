@@ -49,7 +49,7 @@ Interactive Q&A
 <img src="q&a.png" alt="Question Answering Interface" width="800"/>
 </div>
 Architecture
-<img src="flowchat.png" alt="Question Answering Interface" width="800"/>
+<img src="flowchat.png" alt="flowchart" width="800"/>
 </div>
 
 Why Namespace-Based Retrieval?
