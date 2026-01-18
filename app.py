@@ -9,8 +9,7 @@ from pinecone import Pinecone
 from langchain_mistralai import ChatMistralAI, MistralAIEmbeddings
 from dotenv import load_dotenv
 import tempfile
-from image_extractor import extract_images_from_pdf
-from image_indexer import build_image_vectors
+
 
 # ---------------- SETUP ----------------
 load_dotenv()
