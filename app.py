@@ -110,16 +110,6 @@ def upload_pdf():
     temp_dir = tempfile.gettempdir()
     path = os.path.join(temp_dir, f"{uuid.uuid4()}.pdf")
     file.save(path)
-    # ---- IMAGE HANDLING (NEW) ----
-    images = extract_images_from_pdf(path)
-
-    if images:
-        image_vectors = build_image_vectors(
-            images=images,
-            embeddings_model=embeddings_model,
-            llm=llm
-        )
-        index.upsert(vectors=image_vectors, namespace=current_user)
 
 
     pages = extract_text_from_pdf(path)

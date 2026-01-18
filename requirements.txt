@@ -10,14 +10,3 @@ langchain-mistralai
 gunicorn
 psycopg[binary]
 gunicorn
-# ---- Image parsing (Python 3.12 compatible) ----
-unstructured[pdf]>=0.16.19
-pillow>=10.0.0
-opencv-python>=4.9.0.80
-pytesseract>=0.3.10
-
-# ---- PDF / image backends ----
-pdfminer.six>=20221105
-pymupdf>=1.23.8
-python-magic>=0.4.27
-numpy>=1.26.0
