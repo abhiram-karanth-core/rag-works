@@ -55,7 +55,7 @@ embeddings_model = MistralAIEmbeddings(model="mistral-embed")
 
 
 # ---------------- AUTH ROUTES ----------------
-@app.route("/register", methods=["POST"])
+@app.route("/auth", methods=["POST"])
 def register():
     data = request.json
     username = data.get("username")
