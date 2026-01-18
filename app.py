@@ -23,7 +23,11 @@ if not database_url:
 
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config["JWT_SECRET_KEY"] = os.getenv(
+    "JWT_SECRET_KEY",
+    "a9f4e6d2c1b8f7e5d3c6a9b2e1f8d7c5a4b3e2d1f6c9b8a7"
+)
+app.config["SECRET_KEY"] = app.config["JWT_SECRET_KEY"]
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
