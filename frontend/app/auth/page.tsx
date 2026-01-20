@@ -82,6 +82,18 @@ export default function AuthPage() {
                         </Button>
                     </form>
                 </CardContent>
+                <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full mt-2"
+                    onClick={() => {
+                        window.location.href =
+                            "https://authflow-go.onrender.com/auth/google"
+                    }}
+                >
+                    Continue with Google
+                </Button>
+
                 <CardFooter>
                     <Button
                         variant="link"
