@@ -11,15 +11,34 @@ export default function OAuthCallbackClient() {
 
   useEffect(() => {
     const token = params.get("token")
-    const username = params.get("username")
 
-    if (!token || !username) {
+    if (!token) {
       router.replace("/login")
       return
     }
 
-    login(token, username)
-    router.replace("/")
+    const completeOAuth = async () => {
+      try {
+        const res = await fetch("/auth/oauth", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token })
+        })
+
+        if (!res.ok) {
+          router.replace("/login")
+          return
+        }
+
+        const data = await res.json()
+        login(data.access_token, data.username)
+        router.replace("/")
+      } catch (err) {
+        router.replace("/login")
+      }
+    }
+
+    completeOAuth()
   }, [])
 
   return null

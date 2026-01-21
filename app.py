@@ -95,6 +95,64 @@ def login():
 
     return jsonify({"error": "Invalid credentials"}), 401
 
+# authflow.py
+import jwt
+
+AUTHFLOW_SECRET = os.getenv("AUTHFLOW_JWT_SECRET")
+AUTHFLOW_ISSUER = os.getenv("AUTHFLOW_ISSUER")
+
+def verify_authflow_token(token):
+    return jwt.decode(
+        token,
+        AUTHFLOW_SECRET,
+        algorithms=["HS256"],
+        issuer=AUTHFLOW_ISSUER,
+        options={"require": ["exp", "iss", "sub"]}
+    )
+
+@app.route("/auth/oauth", methods=["POST"])
+def oauth_login():
+    data = request.json
+    token = data.get("token")
+
+    if not token:
+        return jsonify({"error": "Missing token"}), 400
+
+    # 1. Verify token issued by Authflow-Go
+    try:
+        claims = verify_authflow_jwt(token)  
+        # claims = { email, provider, sub }
+    except Exception:
+        return jsonify({"error": "Invalid OAuth token"}), 401
+
+    email = claims.get("email")
+
+    if not email:
+        return jsonify({"error": "Email not found"}), 400
+
+    # 2. Find or create user
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        username = email.split("@")[0]
+
+        user = User(
+            username=username,
+            email=email,
+            provider="google"
+        )
+        db.session.add(user)
+        db.session.commit()
+
+    # 3. Issue YOUR app token
+    access_token = create_access_token(identity=user.username)
+
+    return jsonify({
+        "access_token": access_token,
+        "username": user.username
+    }), 200
+
+
 
 # ---------------- PROTECTED ROUTES ----------------
 @app.route("/upload", methods=["POST"])
