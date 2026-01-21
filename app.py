@@ -101,7 +101,7 @@ import jwt
 AUTHFLOW_SECRET = os.getenv("AUTHFLOW_JWT_SECRET")
 AUTHFLOW_ISSUER = os.getenv("AUTHFLOW_ISSUER")
 
-def verify_authflow_token(token):
+def verify_authflow_jwt(token):
     return jwt.decode(
         token,
         AUTHFLOW_SECRET,
