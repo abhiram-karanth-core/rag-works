@@ -19,11 +19,15 @@ export default function OAuthCallbackClient() {
 
     const completeOAuth = async () => {
       try {
-        const res = await fetch("/auth/oauth", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token })
-        })
+        const res = await fetch(
+          `https://ragworks.onrender.com/auth/oauth`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token }),
+          }
+        )
+
 
         if (!res.ok) {
           router.replace("/auth")
