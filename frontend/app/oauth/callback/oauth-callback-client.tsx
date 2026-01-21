@@ -13,7 +13,7 @@ export default function OAuthCallbackClient() {
     const token = params.get("token")
 
     if (!token) {
-      router.replace("/login")
+      router.replace("/auth")
       return
     }
 
@@ -26,7 +26,7 @@ export default function OAuthCallbackClient() {
         })
 
         if (!res.ok) {
-          router.replace("/login")
+          router.replace("/auth")
           return
         }
 
@@ -34,7 +34,7 @@ export default function OAuthCallbackClient() {
         login(data.access_token, data.username)
         router.replace("/")
       } catch (err) {
-        router.replace("/login")
+        router.replace("/auth")
       }
     }
 
