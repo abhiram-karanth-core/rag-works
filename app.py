@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, request, jsonify 
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -94,14 +95,25 @@ def login():
     data = request.json
     username = data.get("username")
     password = data.get("password")
-
+    if not username or not password:
+        return jsonify({"error": "Missing username or password"}), 400
     user = User.query.filter_by(username=username).first()
 
-    if user and user.check_password(password):
-        access_token = create_access_token(identity=username)
-        return jsonify({"access_token": access_token}), 200
+    if not user or not user.check_password(password):
+        return jsonify({"error": "Invalid credentials"}), 401
 
-    return jsonify({"error": "Invalid credentials"}), 401
+    #centralized jwt issuance via authflow-go
+    resp = requests.post(
+        "https://authflow-go.onrender.com/mint",
+        json={"sub": username,
+              "provider": "local"}
+    )
+
+    if resp.status_code != 200:
+        return jsonify({"error": "Auth service failed"}), 500
+
+    return resp.json(), 200
+
 
 # authflow.py
 import jwt

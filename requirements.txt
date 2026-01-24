@@ -10,3 +10,4 @@ langchain-mistralai
 gunicorn
 psycopg[binary]
 gunicorn
+requests
