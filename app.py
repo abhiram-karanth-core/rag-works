@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify 
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -153,7 +153,7 @@ def oauth_login():
         db.session.commit()
 
     # 3. Issue YOUR app token
-    access_token = create_access_token(identity=user.username)
+    access_token = token
 
     return jsonify({
         "access_token": access_token,
