@@ -42,13 +42,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         router.push("/")
     }
 
-    const logout = () => {
+    const logout = async () => {
+        const storedToken = localStorage.getItem("token")
+
+        if (storedToken) {
+            try {
+                await fetch("https://authflow-go.onrender.com/logout", {
+                    method: "POST",
+                    headers: {
+                        Authorization: "Bearer " + storedToken,
+                    },
+                })
+            } catch (err) {
+                console.error("Backend logout failed", err)
+            }
+        }
+
         setToken(null)
         setUser(null)
         localStorage.removeItem("token")
         localStorage.removeItem("username")
         router.push("/auth")
     }
+
 
     return (
         <AuthContext.Provider value={{ token, login, logout, user }}>
