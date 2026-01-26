@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import {
+    AUTHFLOW_URL,
+    AUTHFLOW_CLIENT_ID,
+    AUTHFLOW_REDIRECT_URI,
+} from "@/lib/authflow"
+
 
 export default function AuthPage() {
     const [isLogin, setIsLogin] = useState(true)
@@ -87,9 +93,14 @@ export default function AuthPage() {
                     variant="outline"
                     className="w-full mt-2"
                     onClick={() => {
-                        window.location.href =
-                            "https://authflow-go.onrender.com/auth/google"
+                        const url =
+                            `${AUTHFLOW_URL}/auth/google` +
+                            `?client_id=${AUTHFLOW_CLIENT_ID}` +
+                            `&redirect_uri=${encodeURIComponent(AUTHFLOW_REDIRECT_URI)}`
+
+                        window.location.href = url
                     }}
+
                 >
                     Continue with Google
                 </Button>
