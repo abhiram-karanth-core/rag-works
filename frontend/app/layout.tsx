@@ -1,6 +1,7 @@
 import "./globals.css"
 import { Navbar } from "@/components/navigate"
 import { AuthProvider } from "@/components/auth-provider"
+import { Analytics } from "@vercel/analytics/next"
 
 export default function RootLayout({
   children,
@@ -14,6 +15,7 @@ export default function RootLayout({
           <Navbar />
           <main className="container mx-auto pt-24 px-4 pb-12">
             {children}
+            <Analytics/>
           </main>
         </AuthProvider>
       </body>
