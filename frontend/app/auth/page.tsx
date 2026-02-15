@@ -88,7 +88,7 @@ export default function AuthPage() {
                         </Button>
                     </form>
                 </CardContent>
-                {/* <Button
+                <Button
                     type="button"
                     variant="outline"
                     className="w-full mt-2"
@@ -103,7 +103,7 @@ export default function AuthPage() {
 
                 >
                     Continue with Google
-                </Button> */}
+                </Button>
 
                 <CardFooter>
                     <Button
