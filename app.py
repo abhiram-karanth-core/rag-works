@@ -179,6 +179,8 @@ def oauth_login():
 @jwt_required()
 def upload_pdf():
     current_user = get_jwt_identity() # Use username as namespace
+    print("Namespace:", current_user) #debug
+
     file = request.files.get("file")
 
     if not file:
